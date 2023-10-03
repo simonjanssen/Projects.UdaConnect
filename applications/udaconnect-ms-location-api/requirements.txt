@@ -1,0 +1,5 @@
+fastapi
+kafka-python
+psycopg[binary]
+sqlalchemy
+uvicorn[standard]
