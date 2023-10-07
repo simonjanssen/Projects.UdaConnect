@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from typing import List
-from . import models
+
+import models
 
 
 def create_location(db: Session, location: dict) -> None:

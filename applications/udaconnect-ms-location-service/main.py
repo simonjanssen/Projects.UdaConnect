@@ -6,8 +6,8 @@ import json
 import os
 from sqlalchemy.orm import Session
 
-from . import models, crud
-from .database import SessionLocal, engine
+import models, crud
+from database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
 KAFKA_TOPIC = os.getenv("KAFKA_TOPIC")
@@ -44,6 +44,7 @@ try:
             try:
                 db = SessionLocal()
                 crud.create_locations(db, values)
+                logger.debug(f"Added {len(values)} location entries")
             finally:
                 db.close()
 
