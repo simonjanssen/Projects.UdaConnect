@@ -12,12 +12,24 @@ message PersonMessage {
     string registration_time = 5;
 }
 
-message LocationMessage {
+message PersonMessageList {
+    repeated PersonMessage persons = 1;
+}
+
+message LocationIdMessage {
     int32 id = 1;
+}
+
+message LocationMessage {
+    optional int32 id = 1;
     int32 person_id = 2;
     float longitude = 3;
     float latitude = 4;
     string creation_time = 5;
+}
+
+message LocationMessageList {
+    repeated LocationMessage locations = 1;
 }
 
 message ConnectionMessage {
@@ -29,8 +41,15 @@ message ConnectionMessageList {
     repeated ConnectionMessage connections = 1;
 }
 
-message Empty {}
+message EmptyMessage {}
+
+
+service PersonService {
+    rpc GetPerson(PersonIdMessage) returns (PersonMessage);
+    rpc GetPersons(EmptyMessage) returns (PersonMessageList);
+    rpc CreatePerson(PersonMessage) returns (PersonMessage);
+}
 
 service ConnectionService {
-    rpc Get(PersonIdMessage) returns (ConnectionMessageList);
+    rpc GetConnections(PersonIdMessage) returns (ConnectionMessageList);
 }

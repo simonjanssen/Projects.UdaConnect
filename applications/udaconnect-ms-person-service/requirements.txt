@@ -1,5 +1,5 @@
-fastapi
 grpcio
 grpcio-tools
 loguru
-uvicorn[standard]
+psycopg[binary]
+sqlalchemy

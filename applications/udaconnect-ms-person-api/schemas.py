@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 
 class LocationIngest(BaseModel):
     person_id: int = Field(examples=[123])
-    longitude: str = Field(examples=["123.456"])
-    latitude: str = Field(examples=["123.456"])
+    longitude: float = Field(examples=[123.456])
+    latitude: float = Field(examples=[123.456])
     creation_time: datetime = Field(examples=["2023-10-03T07:06:08.210215"])
 
     class Config:
@@ -15,8 +15,8 @@ class LocationIngest(BaseModel):
 class LocationRetrieve(BaseModel):
     id: int = Field(examples=[123])
     person_id: int = Field(examples=[123])
-    longitude: str = Field(examples=["123.456"])
-    latitude: str = Field(examples=["123.456"])
+    longitude: float = Field(examples=[123.456])
+    latitude: float = Field(examples=[123.456])
     creation_time: datetime = Field(examples=["2023-10-03T07:06:08.210215"])
 
     class Config:
