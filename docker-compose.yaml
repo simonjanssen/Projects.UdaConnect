@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   kafka:
     # https://github.com/bitnami/containers/blob/main/bitnami/kafka/README.md
     image: bitnami/kafka:latest
@@ -14,9 +15,12 @@ services:
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-    ports:
-      - 9094:9094
-  
+    healthcheck:
+      test: ["CMD", "bash", "-c", "/opt/bitnami/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      
   kafka-init:
     # init kafka client container to create topic and then exit
     image: bitnami/kafka:latest
@@ -30,8 +34,9 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
     depends_on:
-      - kafka
-    command: /opt/bitnami/kafka/bin//kafka-topics.sh --create --topic locations --bootstrap-server kafka:9092
+      kafka:
+        condition: service_healthy
+    command: /opt/bitnami/kafka/bin/kafka-topics.sh --create --topic locations --bootstrap-server kafka:9092
 
   postgres:
     image: postgres:16
@@ -42,51 +47,95 @@ services:
       POSTGRES_DB: udaconnect
     networks:
       - udaconnect-ms
-    ports:
-      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d udaconnect"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   pgadmin:
     image: dpage/pgadmin4:latest
     networks:
       - udaconnect-ms
     environment:
-      PGADMIN_DEFAULT_EMAIL: user@domain.com
-      PGADMIN_DEFAULT_PASSWORD: secret
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=secret
+      - PGADMIN_CONFIG_CONSOLE_LOG_LEVEL=5
     ports:
       - 8081:80
     depends_on:
-      - postgres
-  
+      postgres:
+        condition: service_healthy
+
+  udaconnect-ms-person-service:
+    image: udaconnect-ms-person-service:latest
+    build: ./applications/udaconnect-ms-person-service
+    networks:
+      - udaconnect-ms
+    environment:
+      - DB_USER=admin
+      - DB_PASSWORD=secret
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=udaconnect
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  udaconnect-ms-location-service:
+    image: udaconnect-ms-location-service:latest
+    build: ./applications/udaconnect-ms-location-service
+    networks:
+      - udaconnect-ms
+    environment:
+      - DB_USER=admin
+      - DB_PASSWORD=secret
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=udaconnect
+      - KAFKA_TOPIC=locations
+      - KAFKA_SERVER=kafka:9092
+      - KAFKA_GROUP_ID=locations-group
+      - CYCLE_TIME=60
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+
+  udaconnect-ms-person-api:
+    image: udaconnect-ms-person-api:latest
+    build: ./applications/udaconnect-ms-person-api
+    networks:
+      - udaconnect-ms
+    ports:
+      - 8001:80
+    environment:
+      - gRPC_HOST=udaconnect-ms-person-service
+      - gRPC_PORT=5005
+    depends_on:
+      - udaconnect-ms-person-service
+
   udaconnect-ms-location-api:
     image: udaconnect-ms-location-api:latest
+    build: ./applications/udaconnect-ms-location-api
     environment:
-      DB_USER: admin
-      DB_PASSWORD: secret
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: udaconnect
-      KAFKA_SERVER: kafka:9092
-      KAFKA_TOPIC: locations
+      - DB_USER=admin
+      - DB_PASSWORD=secret
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=udaconnect
+      - KAFKA_SERVER=kafka:9092
+      - KAFKA_TOPIC=locations
     ports:
-      - 8080:80
+      - 8002:80
     networks:
       - udaconnect-ms
     depends_on:
-      - kafka
-      - postgres
-    deploy:
-      restart_policy:
-        condition: on-failure
-        max_attempts: 5
-        delay: 15s
-        window: 60s
-
-    healthcheck:
-      test: ["CMD", "curl", "-X", "'GET'", "'http://localhost:8080/locations/1'", "-H", "'accept: application/json'"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
 
 networks:
   udaconnect-ms:
