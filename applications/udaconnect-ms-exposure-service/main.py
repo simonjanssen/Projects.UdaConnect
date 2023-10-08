@@ -5,7 +5,7 @@ from sqlalchemy.sql import text
 from typing import List, Dict
 from datetime import datetime, timedelta
 import os 
-from time import sleep 
+from time import sleep, perf_counter
 from loguru import logger
 import numpy as np 
 from haversine import haversine_vector, Unit
@@ -14,12 +14,17 @@ import models
 from database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
-CYCLE_TIME = os.getenv("CYCLE_TIME", 60)
+CYCLE_TIME = int(os.getenv("CYCLE_TIME", 60))
+assert CYCLE_TIME > 0
 
 
 while True:
 
+    t1 = perf_counter()
+
     try:
+        locations = {}
+        exposures = []
         db = SessionLocal()
 
         # get all persons
@@ -29,7 +34,6 @@ while True:
 
         # pre-fetch all locations by person id
         today = (datetime.now() - timedelta(seconds=CYCLE_TIME*10)).date()
-        locations = {}
         for person_id in person_ids:
             locations[person_id] = db.query(models.Location).filter(
                 and_(
@@ -48,7 +52,6 @@ while True:
         logger.debug(f"Exposure pairs: {person_pairs}")
 
         # calculate distances
-        exposures = []
         for (person_a, person_b) in person_pairs:
 
             locations_a = locations[person_a]
@@ -78,19 +81,23 @@ while True:
             logger.debug(exposure)
             exposures.append(exposure)
 
-        upsert_stmt = postgres_upsert(models.Exposure).values(exposures)
-        upsert_stmt = upsert_stmt.on_conflict_do_update(
-            index_elements = [models.Exposure.person_a, models.Exposure.person_b, models.Exposure.date_exposed], 
-            set_ = dict(
-                location_a = upsert_stmt.excluded.location_a, 
-                location_b = upsert_stmt.excluded.location_b, 
-                min_distance = upsert_stmt.excluded.min_distance ) )
-        db.execute(upsert_stmt)
-        db.commit()
+        if exposures:
+            upsert_stmt = postgres_upsert(models.Exposure).values(exposures)
+            upsert_stmt = upsert_stmt.on_conflict_do_update(
+                index_elements = [models.Exposure.person_a, models.Exposure.person_b, models.Exposure.date_exposed], 
+                set_ = dict(
+                    location_a = upsert_stmt.excluded.location_a, 
+                    location_b = upsert_stmt.excluded.location_b, 
+                    min_distance = upsert_stmt.excluded.min_distance ) )
+            db.execute(upsert_stmt)
+            db.commit()
 
     finally:
         del locations
         del exposures
         db.close()
+    
+    t2 = perf_counter()
+    logger.info(f"Execution time: {(t2-t1):.06f}s")
 
     sleep(CYCLE_TIME)
