@@ -105,6 +105,22 @@ services:
       postgres:
         condition: service_healthy
 
+  exposure-service:
+    image: udaconnect-ms-exposure-service:latest
+    build: ./applications/udaconnect-ms-exposure-service
+    networks:
+    - udaconnect
+    environment:
+      - DB_USER=admin
+      - DB_PASSWORD=secret
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=udaconnect
+      - CYCLE_TIME=60
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   person-api:
     image: udaconnect-ms-person-api:latest
     build: ./applications/udaconnect-ms-person-api
@@ -113,10 +129,11 @@ services:
     ports:
       - 8001:80
     environment:
-      - gRPC_HOST=udaconnect-person-service
+      - gRPC_HOST=person-service
       - gRPC_PORT=5005
     depends_on:
-      - udaconnect-person-service
+      person-service:
+        condition: service_started
 
   location-api:
     image: udaconnect-ms-location-api:latest
