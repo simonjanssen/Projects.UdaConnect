@@ -2,4 +2,4 @@
 
 cp -f ../../build/types/* ./
 
-docker build -t udaconnect-exposure-service:latest -f Dockerfile .
+docker build -t udaconnect-ms-exposure-service:latest -f Dockerfile .

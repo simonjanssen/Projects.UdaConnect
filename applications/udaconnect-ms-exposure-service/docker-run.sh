@@ -7,4 +7,4 @@ docker run --rm -it \
     -e DB_PASSWORD=secret \
     -e DB_NAME=udaconnect \
     --network projectsudaconnect_udaconnect-ms \
-    udaconnect-exposure-service:latest
+    udaconnect-ms-exposure-service:latest
