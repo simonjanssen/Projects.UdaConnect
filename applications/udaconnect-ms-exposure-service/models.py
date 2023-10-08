@@ -1,7 +1,8 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, Float, Date
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, Float, Date, func, UniqueConstraint, CheckConstraint
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
-from .database import Base
+Base = declarative_base()
 
 
 class Person(Base):
@@ -11,7 +12,7 @@ class Person(Base):
     first_name = Column(String)
     last_name = Column(String)
     company_name = Column(String)
-    registration_time = Column(DateTime)
+    registration_time = Column(DateTime, server_default=func.now())
 
 
 class Location(Base):
@@ -34,3 +35,5 @@ class Exposure(Base):
     location_b = Column(Integer, ForeignKey("locations.id"))
     date_exposed = Column(Date)
     min_distance = Column(Float)
+
+    __table_args__ = (UniqueConstraint("person_a", "person_b", "date_exposed"), CheckConstraint("person_a != person_b"), CheckConstraint("location_a != location_b"))
