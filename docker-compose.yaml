@@ -156,6 +156,17 @@ services:
       kafka:
         condition: service_healthy
 
+  frontend:
+    image: udaconnect-ms-frontend:latest
+    build: ./applications/udaconnect-ms-frontend
+    networks:
+      - udaconnect
+    ports:
+      - 3000:3000
+    depends_on:
+      person-api:
+        condition: service_started
+
 networks:
   udaconnect:
     driver: bridge
