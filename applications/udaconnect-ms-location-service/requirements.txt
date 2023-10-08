@@ -1,0 +1,4 @@
+kafka-python
+loguru
+psycopg[binary]
+sqlalchemy

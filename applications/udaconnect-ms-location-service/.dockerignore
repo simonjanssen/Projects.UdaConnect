@@ -1,0 +1,5 @@
+__pycache__
+*.py[cod]
+env.sh
+docker-build.sh
+docker-run.sh
