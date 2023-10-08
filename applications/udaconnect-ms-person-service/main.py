@@ -4,7 +4,7 @@ from datetime import datetime
 from loguru import logger 
 import time
 
-import models
+import models, crud
 from database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
@@ -22,6 +22,16 @@ def PersonModel_to_PersonMessage(person: models.Person) -> definitions_pb2.Perso
     )
 
 
+def LocationModel_to_LocationMessage(location: models.Location) -> definitions_pb2.LocationMessage:
+    return definitions_pb2.LocationMessage(
+        id = location.id,
+        person_id = location.person_id,
+        latitude = location.latitude,
+        longitude = location.longitude,
+        creation_time = location.creation_time.isoformat()
+    )
+
+
 def PersonMessage_to_PersonModel(person: definitions_pb2.PersonMessage) -> models.Person:
     return models.Person(
         id = person.id,
@@ -31,12 +41,21 @@ def PersonMessage_to_PersonModel(person: definitions_pb2.PersonMessage) -> model
     )
 
 
+def PersonLocationModel_to_ConnectionMessage(person: models.Person, location: models.Location) -> definitions_pb2.ConnectionMessage:
+    personMessage = PersonModel_to_PersonMessage(person)
+    locationMessage = LocationModel_to_LocationMessage(location)
+    return definitions_pb2.ConnectionMessage(
+        person=personMessage,
+        location=locationMessage
+    )
+
+
 class PersonServicer(definitions_pb2_grpc.PersonServiceServicer):
 
     def GetPerson(self, request, context):
         db = SessionLocal()
         try:
-            person = db.query(models.Person).filter(models.Person.id == request.id).first()
+            person = crud.get_person(db, request.id)
             if person:
                 personMessage = PersonModel_to_PersonMessage(person)
             else:
@@ -47,9 +66,8 @@ class PersonServicer(definitions_pb2_grpc.PersonServiceServicer):
 
     def GetPersons(self, request, context):
         db = SessionLocal()
-        skip, limit = 0, 1000  # todo pass skip, limit as request param
         try:
-            persons = db.query(models.Person).offset(skip).limit(limit).all()
+            persons = crud.get_persons(db)
             if persons:
                 personMessageList = definitions_pb2.PersonMessageList(persons=[PersonModel_to_PersonMessage(person) for person in persons])
             else:
@@ -61,48 +79,24 @@ class PersonServicer(definitions_pb2_grpc.PersonServiceServicer):
     def CreatePerson(self, request, context):
         db = SessionLocal()
         try:
-            db_person = PersonMessage_to_PersonModel(request)
-            db.add(db_person)
-            db.commit()
-            db.refresh(db_person)
+            person = PersonMessage_to_PersonModel(request)
+            person = crud.create_person(db, person)
         finally:
             db.close()
-        return request
+        return PersonModel_to_PersonMessage(person)
 
 
 class ConnectionServicer(definitions_pb2_grpc.ConnectionServiceServicer):
 
     def GetConnections(self, request, context):
 
-        logger.debug("Creating dummy PersonMessage object")
-        personMessage = definitions_pb2.PersonMessage(
-            id = 1,
-            first_name = "Thomas",
-            last_name = "Mueller",
-            company_name = "FC Bayern",
-            registration_time = datetime.now().isoformat()
-        )
-
-        logger.debug("Creating dummy LocationMessage object")
-        locationMessage = definitions_pb2.LocationMessage(
-            id = 1,
-            person_id = 1,
-            longitude = 123.456,
-            latitude = 123.456,
-            creation_time = datetime.now().isoformat()
-        )
-
-        logger.debug("Creating dummy ConnectionMessage object")
-        connectionMessage = definitions_pb2.ConnectionMessage(
-            person = personMessage,
-            location = locationMessage
-        )
-
-        logger.debug("Creating dummy ConnectionMessageList object")
-        connectionMessageList = definitions_pb2.ConnectionMessageList(
-            connections = [connectionMessage]
-        )
-
+        db = SessionLocal()
+        try:
+            connections = crud.get_connections(db, request.person_id, request.start_date, request.end_date, request.meters)
+            connectionMessages = [PersonLocationModel_to_ConnectionMessage(person, location) for (_, person, location) in connections]
+            connectionMessageList = definitions_pb2.ConnectionMessageList(connections=connectionMessages)
+        finally:
+            db.close()
         return connectionMessageList
 
 
