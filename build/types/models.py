@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, Float, Date, func
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, Float, Date, func, UniqueConstraint, CheckConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -35,3 +35,5 @@ class Exposure(Base):
     location_b = Column(Integer, ForeignKey("locations.id"))
     date_exposed = Column(Date)
     min_distance = Column(Float)
+
+    __table_args__ = (UniqueConstraint("person_a", "person_b", "date_exposed"), CheckConstraint("person_a != person_b"), CheckConstraint("location_a != location_b"))
