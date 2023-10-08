@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from pydantic import BaseModel, Field
 
 
@@ -31,6 +31,13 @@ class Person(BaseModel):
 
     class Config:
         from_attributes = True  # orm mode
+
+
+class ConnectionRequest(BaseModel):
+    person_id: int = Field(examples=[123])
+    start_date: date = Field(examples=["2023-10-03"])
+    end_date: date = Field(examples=["2023-10-03"])
+    meters: float = Field(examples=[5.0])
 
 
 class Connection(BaseModel):

@@ -19,7 +19,7 @@ class Location(Base):
     __tablename__ = "locations"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    person_id = Column(Integer, ForeignKey("persons.id"))
+    person_id = Column(Integer, ForeignKey(Person.id))
     longitude = Column(Float)
     latitude = Column(Float)
     creation_time = Column(DateTime)
@@ -29,11 +29,15 @@ class Exposure(Base):
     __tablename__ = "exposures"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    person_a = Column(Integer, ForeignKey("persons.id")) 
-    person_b = Column(Integer, ForeignKey("persons.id"))
-    location_a = Column(Integer, ForeignKey("locations.id"))
-    location_b = Column(Integer, ForeignKey("locations.id"))
+    person_a = Column(Integer, ForeignKey(Person.id)) 
+    person_b = Column(Integer, ForeignKey(Person.id))
+    location_a = Column(Integer, ForeignKey(Location.id))
+    location_b = Column(Integer, ForeignKey(Location.id))
     date_exposed = Column(Date)
     min_distance = Column(Float)
 
-    __table_args__ = (UniqueConstraint("person_a", "person_b", "date_exposed"), CheckConstraint("person_a != person_b"), CheckConstraint("location_a != location_b"))
+    __table_args__ = (
+        UniqueConstraint("person_a", "person_b", "date_exposed"), 
+        CheckConstraint("person_a != person_b"), 
+        CheckConstraint("location_a != location_b")
+    )

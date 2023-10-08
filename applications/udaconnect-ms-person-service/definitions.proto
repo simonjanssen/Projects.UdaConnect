@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-message PersonIdMessage {
+message PersonRequestMessage {
     int32 id = 1;
 }
 
@@ -32,6 +32,13 @@ message LocationMessageList {
     repeated LocationMessage locations = 1;
 }
 
+message ConnectionRequestMessage {
+    int32 person_id = 1;
+    string start_date = 2;
+    string end_date = 3;
+    float meters = 4;
+}
+
 message ConnectionMessage {
     PersonMessage person = 1;
     LocationMessage location = 2;
@@ -45,11 +52,11 @@ message EmptyMessage {}
 
 
 service PersonService {
-    rpc GetPerson(PersonIdMessage) returns (PersonMessage);
+    rpc GetPerson(PersonRequestMessage) returns (PersonMessage);
     rpc GetPersons(EmptyMessage) returns (PersonMessageList);
     rpc CreatePerson(PersonMessage) returns (PersonMessage);
 }
 
 service ConnectionService {
-    rpc GetConnections(PersonIdMessage) returns (ConnectionMessageList);
+    rpc GetConnections(ConnectionRequestMessage) returns (ConnectionMessageList);
 }
