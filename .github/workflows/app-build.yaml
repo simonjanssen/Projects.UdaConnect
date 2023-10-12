@@ -15,16 +15,19 @@ jobs:
         with:
           repository: ${{ github.repository }}
           ref: ${{ github.head_ref }}
-      - name: Get variable names
+      - name: Get application name
         # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
-        id: variables
+        id: appname
         run: |
-          echo "APPNAME=$(echo ${{ github.head_ref }} | cut -d'/' -f2)" >> $GITHUB_OUTPUT
-          echo "TAG=$(cat applications/${{ steps.variables.outputs.APPNAME }}/VERSION)" >> $GITHUB_OUTPUT 
+          echo "NAME=$(echo ${{ github.head_ref }} | cut -d'/' -f2)" >> $GITHUB_OUTPUT
+      - name: Get application tag
+        id: apptag
+        run: |
+          echo "TAG=$(cat applications/${{ steps.appname.outputs.NAME }}/VERSION)" >> $GITHUB_OUTPUT 
       - name: Print variables
         run: |
-          echo "${{ steps.variables.outputs.APPNAME }}"
-          echo "${{ steps.variables.outputs.TAG }}"
+          echo "${{ steps.appname.outputs.NAME }}"
+          echo "${{ steps.apptag.outputs.TAG }}"
       - name: Copy types
         run: cp -f build/types/* applications/${{ steps.variables.outputs.APPNAME }}/
       - name: Set up qemu
