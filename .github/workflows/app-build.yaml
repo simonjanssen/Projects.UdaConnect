@@ -3,7 +3,7 @@ name: UdaConnect Application Build
 on:
   pull_request:
     branches:
-      - app/*
+      - dev
 
 jobs:
   build_and_push:
