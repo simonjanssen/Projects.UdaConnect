@@ -10,12 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: print variables
+        # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
         run: |
           echo "github.head_ref = ${{ github.head_ref }}"
           echo "github.ref = ${{ github.ref }}"
           echo "github.ref_name = ${{ github.ref_name }}"
       - name: clone github repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ${{ github.repository }}
-          ref: ${{ env.GITHUB_REF }}
+          ref: ${{ github.head_ref }}
