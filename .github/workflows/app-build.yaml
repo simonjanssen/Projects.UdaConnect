@@ -10,14 +10,18 @@ jobs:
     if: startsWith(github.head_ref, 'app/')
     runs-on: ubuntu-latest
     steps:
-      - name: print variables
+      - name: Print variables
         # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
         run: |
           echo "github.head_ref = ${{ github.head_ref }}"
           echo "github.ref = ${{ github.ref }}"
           echo "github.ref_name = ${{ github.ref_name }}"
-      - name: clone github repository
+      - name: Clone github repository
         uses: actions/checkout@v4
         with:
           repository: ${{ github.repository }}
           ref: ${{ github.head_ref }}
+      - name: Copy types
+        run: |
+          echo "$(ls -l)"
+          
