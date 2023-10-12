@@ -1,0 +1,16 @@
+name: UdaConnect Application Build
+
+on:
+  pull_request:
+    branches:
+      - app/*
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone github repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: $${{ env.GITHUB_REF }}
