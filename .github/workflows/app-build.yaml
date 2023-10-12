@@ -20,9 +20,11 @@ jobs:
         id: variables
         run: |
           echo "APPNAME=$(echo ${{ github.head_ref }} | cut -d'/' -f2)" >> $GITHUB_OUTPUT
-          echo "$GITHUB_OUTPUT"
           echo "TAG=$(cat applications/$APPNAME/VERSION)" >> $GITHUB_OUTPUT 
-          echo "$TAG"
+      - name: Print variables
+        run: |
+          echo "${{ steps.variables.outputs.APPNAME }}"
+          echo "${{ steps.variables.outputs.TAG }}"
       - name: Copy types
         run: cp -f build/types/* applications/${{ steps.variables.outputs.APPNAME }}/
       - name: Set up qemu
