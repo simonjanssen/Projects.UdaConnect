@@ -48,6 +48,4 @@ jobs:
           platforms: linux/amd64
           push: True
           tags: ${{ secrets.DOCKERHUB_USER }}/${{ steps.appname.outputs.NAME }}:${{ steps.apptag.outputs.TAG }},${{ secrets.DOCKERHUB_USER }}/${{ steps.appname.outputs.NAME }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           
