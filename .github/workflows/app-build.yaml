@@ -29,7 +29,9 @@ jobs:
           echo "${{ steps.appname.outputs.NAME }}"
           echo "${{ steps.apptag.outputs.TAG }}"
       - name: Copy types
-        run: cp -f build/types/* applications/${{ steps.variables.outputs.APPNAME }}/
+        run: | 
+          cp -f build/types/* applications/${{ steps.appname.outputs.NAME }}/
+          ls -l applications/${{ steps.appname.outputs.NAME }}
       - name: Set up qemu
         uses: docker/setup-qemu-action@v3
       - name: Set up docker buildx
@@ -42,7 +44,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v5
         with:
-          context: "{{defaultContext}}:applications/${{ steps.appname.outputs.NAME }}"
+          context: applications/${{ steps.appname.outputs.NAME }}
           platforms: linux/amd64
           push: True
           tags: ${{ secrets.DOCKERHUB_USER }}/${{ steps.appname.outputs.NAME }}:${{ steps.apptag.outputs.TAG }},${{ secrets.DOCKERHUB_USER }}/${{ steps.appname.outputs.NAME }}:latest
