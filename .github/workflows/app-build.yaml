@@ -30,7 +30,7 @@ jobs:
           echo "${{ steps.apptag.outputs.TAG }}"
       - name: Copy types
         run: | 
-          cp -f build/types/* applications/${{ steps.variables.outputs.APPNAME }}/
+          cp -f build/types/* applications/${{ steps.appname.outputs.NAME }}/
           ls -l applications/${{ steps.appname.outputs.NAME }}
       - name: Set up qemu
         uses: docker/setup-qemu-action@v3
