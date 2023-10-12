@@ -42,8 +42,8 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v5
         with:
-          context: "{{defaultContext}}:applications/${{ steps.variables.outputs.APPNAME }}"
+          context: "{{defaultContext}}:applications/${{ steps.appname.outputs.NAME }}"
           platforms: linux/amd64
           push: True
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.variables.outputs.APPNAME }}:${{ steps.version.outputs.TAG }},${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.variables.outputs.APPNAME }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.appname.outputs.NAME }}:${{ steps.apptag.outputs.TAG }},${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.appname.outputs.NAME }}:latest
           
