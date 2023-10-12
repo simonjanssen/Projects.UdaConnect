@@ -45,5 +45,5 @@ jobs:
           context: "{{defaultContext}}:applications/${{ steps.appname.outputs.NAME }}"
           platforms: linux/amd64
           push: True
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.appname.outputs.NAME }}:${{ steps.apptag.outputs.TAG }},${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.appname.outputs.NAME }}:latest
+          tags: ${{ secrets.DOCKERHUB_USER }}/${{ steps.appname.outputs.NAME }}:${{ steps.apptag.outputs.TAG }},${{ secrets.DOCKERHUB_USER }}/${{ steps.appname.outputs.NAME }}:latest
           
