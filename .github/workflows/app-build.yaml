@@ -24,8 +24,5 @@ jobs:
           repository: ${{ github.repository }}
           ref: ${{ github.head_ref }}
       - name: Copy types
-        run: |
-          echo "$(ls -l)"
-          echo "${{ steps.variables.outputs.APPNAME }}"
-          cp -f build/types/* applications/*/
+        run: cp -f build/types/* applications/${{ steps.variables.outputs.APPNAME }}/
           
