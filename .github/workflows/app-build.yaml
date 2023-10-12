@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: print variables
-        run: echo "env.GITHUB_REF = $${{ env.GITHUB_REF }}"
+        run: echo "env.GITHUB_REF = ${{ env.GITHUB_REF }}"
       - name: clone github repository
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
-          ref: $${{ env.GITHUB_REF }}
+          ref: ${{ env.GITHUB_REF }}
