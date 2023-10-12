@@ -26,6 +26,6 @@ jobs:
       - name: Copy types
         run: |
           echo "$(ls -l)"
-          echo "${{ steps.variables.output.APPNAME }}"
+          echo "${{ steps.variables.outputs.APPNAME }}"
           cp -f build/types/* applications/*/
           
