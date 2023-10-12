@@ -20,7 +20,7 @@ jobs:
         id: variables
         run: |
           echo "APPNAME=$(echo ${{ github.head_ref }} | cut -d'/' -f2)" >> $GITHUB_OUTPUT
-          echo "TAG=$(cat applications/$APPNAME/VERSION)" >> $GITHUB_OUTPUT 
+          echo "TAG=$(cat applications/${{ steps.variables.outputs.APPNAME }}/VERSION)" >> $GITHUB_OUTPUT 
       - name: Print variables
         run: |
           echo "${{ steps.variables.outputs.APPNAME }}"
