@@ -17,7 +17,7 @@ jobs:
           echo "github.head_ref = ${{ github.head_ref }}"
           echo "github.ref = ${{ github.ref }}"
           echo "github.ref_name = ${{ github.ref_name }}"
-          echo "APPNAME=$(echo ${{ github.ref_name }} | cut -d'/' -f2)" >> $GITHUB_OUTPUT
+          echo "APPNAME=$(echo ${{ github.head_ref }} | cut -d'/' -f2)" >> $GITHUB_OUTPUT
       - name: Clone github repository
         uses: actions/checkout@v4
         with:
