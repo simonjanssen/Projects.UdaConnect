@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN ./compile.sh
+RUN . compile.sh
 
 EXPOSE 5005
 
