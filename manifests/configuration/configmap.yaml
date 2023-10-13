@@ -5,5 +5,7 @@ data:
   DB_NAME: "geoconnections"
   DB_HOST: "postgres"
   DB_PORT: "5432"
+  PGADMIN_DEFAULT_EMAIL: user@domain.com
+  PGADMIN_DEFAULT_PASSWORD: secret
 metadata:
-  name: db-env
+  name: udaconnect-env
