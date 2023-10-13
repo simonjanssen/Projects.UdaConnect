@@ -3,7 +3,6 @@ apiVersion: v1
 metadata:
   name: postgres-volume
 spec:
-  storageClassName: manual
   capacity:
     storage: 256Mi
   accessModes:
