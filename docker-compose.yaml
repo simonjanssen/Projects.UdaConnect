@@ -70,8 +70,7 @@ services:
         condition: service_healthy
 
   person-service:
-    image: udaconnect-ms-person-service:latest
-    build: ./applications/udaconnect-ms-person-service
+    image: simonshub/udaconnect-ms-person-service:latest
     networks:
       - udaconnect
     environment:
@@ -85,8 +84,7 @@ services:
         condition: service_healthy
 
   location-service:
-    image: udaconnect-ms-location-service:latest
-    build: ./applications/udaconnect-ms-location-service
+    image: simonshub/udaconnect-ms-location-service:latest
     networks:
       - udaconnect
     environment:
@@ -106,8 +104,7 @@ services:
         condition: service_healthy
 
   exposure-service:
-    image: udaconnect-ms-exposure-service:latest
-    build: ./applications/udaconnect-ms-exposure-service
+    image: simonshub/udaconnect-ms-exposure-service:latest
     networks:
     - udaconnect
     environment:
@@ -122,8 +119,7 @@ services:
         condition: service_healthy
 
   person-api:
-    image: udaconnect-ms-person-api:latest
-    build: ./applications/udaconnect-ms-person-api
+    image: simonshub/udaconnect-ms-person-api:latest
     networks:
       - udaconnect
     ports:
@@ -136,8 +132,7 @@ services:
         condition: service_started
 
   location-api:
-    image: udaconnect-ms-location-api:latest
-    build: ./applications/udaconnect-ms-location-api
+    image: simonshub/udaconnect-ms-location-api:latest
     environment:
       - DB_USER=admin
       - DB_PASSWORD=secret
@@ -157,8 +152,7 @@ services:
         condition: service_healthy
 
   frontend:
-    image: udaconnect-ms-frontend:latest
-    build: ./applications/udaconnect-ms-frontend
+    image: simonshub/udaconnect-ms-frontend:latest
     networks:
       - udaconnect
     ports:
