@@ -23,17 +23,17 @@ spec:
             valueFrom:
               configMapKeyRef:
                 name: udaconnect-env
-                key: DB_USERNAME
+                key: POSTGRES_USER
           - name: POSTGRES_PASSWORD
             valueFrom:
-              secretKeyRef:
-                name: db-secret
-                key: DB_PASSWORD
+              configMapKeyRef:
+                name: udaconnect-env
+                key: POSTGRES_PASSWORD
           - name: POSTGRES_DB
             valueFrom:
               configMapKeyRef:
                 name: udaconnect-env
-                key: DB_NAME
+                key: POSTGRES_DB
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgresdb
