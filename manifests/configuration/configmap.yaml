@@ -13,6 +13,10 @@ data:
   CYCLE_TIME_EXPOSURE: "60"
   CYCLE_TIME_LOCATION: "60"
 
+  KAFKA_SERVER: kafka:9092
+  KAFKA_TOPIC: locations
+  KAFKA_GROUP_ID: locations-group
+
   gRPC_HOST: person-service-svc
   gRPC_PORT: "5005"
   

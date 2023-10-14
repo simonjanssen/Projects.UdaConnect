@@ -49,11 +49,11 @@ spec:
                 configMapKeyRef:
                   name: udaconnect-env
                   key: KAFKA_SERVER                       
-            - name: KAFKA_PORT
+            - name: KAFKA_TOPIC
               valueFrom:
                 configMapKeyRef:
                   name: udaconnect-env
-                  key: KAFKA_PORT        
+                  key: KAFKA_TOPIC       
             - name: KAFKA_GROUP_ID
               valueFrom:
                 configMapKeyRef:
