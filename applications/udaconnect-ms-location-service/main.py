@@ -27,11 +27,13 @@ consumer = KafkaConsumer(
 
 try:
     while True:
-        logger.info(f"Entering polling loop (cycle time is {CYCLE_TIME}s)")
+        logger.info(f"entering polling loop (cycle time is {CYCLE_TIME}s)")
+        logger.debug("polling consumer..")
         topic_partition = consumer.poll()
-        
+        logger.debug("polling done")
+
         if topic_partition:
-            logger.debug("Found some new messages")
+            logger.debug("found some new messages")
             values = []
             for tp, records in topic_partition.items():
                 for r, record in enumerate(records):
@@ -45,13 +47,13 @@ try:
             try:
                 db = SessionLocal()
                 crud.create_locations(db, values)
-                logger.debug(f"Added {len(values)} location entries")
+                logger.debug(f"added {len(values)} location entries")
             except Exception as ex:
                 logger.error(ex)
             finally:
                 db.close()
         else:
-            logger.debug("No new messages found")
+            logger.debug("no new messages found")
 
         sleep(CYCLE_TIME)
 
