@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: location-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: location-api
+  template:
+    metadata:
+      labels:
+        app: location-api
+    spec:
+      containers:
+        - name: location-api
+          image: simonshub/udaconnect-ms-location-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: udaconnect-env
+                  key: POSTGRES_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: udaconnect-env
+                  key: POSTGRES_PASSWORD
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: udaconnect-env
+                  key: POSTGRES_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: udaconnect-env
+                  key: POSTGRES_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: udaconnect-env
+                  key: POSTGRES_DB
+            - name: KAFKA_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: udaconnect-env
+                  key: KAFKA_SERVER                       
+            - name: KAFKA_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: udaconnect-env
+                  key: KAFKA_PORT        

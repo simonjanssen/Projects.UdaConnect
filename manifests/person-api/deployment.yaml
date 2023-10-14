@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: person-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: person-api
+  template:
+    metadata:
+      labels:
+        app: person-api
+    spec:
+      containers:
+        - name: person-api
+          image: simonshub/udaconnect-ms-person-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: gRPC_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: udaconnect-env
+                  key: gRPC_HOST
+            - name: gRPC_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: udaconnect-env
+                  key: gRPC_PORT
