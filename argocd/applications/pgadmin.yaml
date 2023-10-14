@@ -11,5 +11,5 @@ spec:
   source:
     path: manifests/pgadmin
     repoURL: git@github.com:simonjanssen/Projects.UdaConnect.git
-    targetRevision: dev
+    targetRevision: feature/argocd
   syncPolicy: {}
