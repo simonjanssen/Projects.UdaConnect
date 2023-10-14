@@ -2075,6 +2075,7 @@ provisioning:
   ##
   topics:
     - name: locations
+      numPartitions: 3
   ## @param provisioning.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
