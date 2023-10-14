@@ -64,7 +64,7 @@ spec:
       initContainers:
         - name: kafka-init
           image: bitnami/kafka:latest
-          command: ["/opt/bitnami/kafka/bin/kafka-topics.sh", "--create", "--topic", "locations", "--bootstrap-server", kafka:9092"]
+          command: ["/opt/bitnami/kafka/bin/kafka-topics.sh", "--create", "--topic", "locations", "--bootstrap-server", kafka-svc:9092"]
           env:
             - name: KAFKA_CFG_NODE_ID
               valueFrom:
