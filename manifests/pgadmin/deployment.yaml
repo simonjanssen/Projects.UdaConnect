@@ -21,10 +21,6 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/pgadmin
               name: pgadmindata
-          volumes:
-            - name: pgadmin-volume
-              persistentVolumeClaim:
-                claimName: pgadmin-pvc
           env:
             - name: PGADMIN_DEFAULT_EMAIL
               valueFrom:
@@ -36,3 +32,8 @@ spec:
                 configMapKeyRef:
                   name: udaconnect-env
                   key: PGADMIN_DEFAULT_PASSWORD
+      
+      volumes:
+        - name: pgadmindata
+          persistentVolumeClaim:
+            claimName: pgadmin-pvc
