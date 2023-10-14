@@ -22,7 +22,6 @@ consumer = KafkaConsumer(
     group_id = KAFKA_GROUP_ID,
     auto_offset_reset="latest", 
     enable_auto_commit=True,
-    request_timeout_ms=11000,
     value_deserializer=lambda m: json.loads(m.decode('utf-8'))
 )
 
@@ -32,7 +31,7 @@ try:
     while True:
         logger.info(f"entering polling loop (cycle time is {CYCLE_TIME}s)")
         logger.debug("polling consumer..")
-        topic_partition = consumer.poll()
+        topic_partition = consumer.poll(timeout_ms=2000)
         logger.debug("polling done")
 
         if topic_partition:
