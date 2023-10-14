@@ -22,7 +22,7 @@ class Connection extends Component {
     if (personId) {
       // TODO: endpoint should be abstracted into a config variable
       fetch(
-        `http://localhost:8001/persons/${personId}/connection?start_date=2020-01-01&end_date=2023-12-31&distance=50000`
+        `http://localhost:30103/persons/${personId}/connection?start_date=2020-01-01&end_date=2023-12-31&distance=50000`
       )
         .then((response) => response.json())
         .then((connections) =>
