@@ -27,6 +27,8 @@ consumer = KafkaConsumer(
 )
 
 try:
+    topics = consumer.topics()
+    logger.debug(topics)
     while True:
         logger.info(f"entering polling loop (cycle time is {CYCLE_TIME}s)")
         logger.debug("polling consumer..")
