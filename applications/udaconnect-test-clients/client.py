@@ -29,7 +29,7 @@ while True:
     }
 
     t1 = time.perf_counter()
-    r = httpx.post("http://localhost:8002/locations", json=location)
+    r = httpx.post("http://localhost:30102/locations", json=location)
     t2 = time.perf_counter()
 
     assert r.status_code == 201

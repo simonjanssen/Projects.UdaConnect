@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: postgres
+  name: kafka
   namespace: argocd
 spec:
   destination:
@@ -9,7 +9,10 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: manifests/postgres
+    helm:
+      valueFiles:
+        - values.yaml
+    path: charts/kafka
     repoURL: git@github.com:simonjanssen/Projects.UdaConnect.git
     targetRevision: feature/argocd
   syncPolicy: {}
