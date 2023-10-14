@@ -15,7 +15,7 @@ spec:
       containers:
         - name: postgres
           image: postgres:16
-          imagePullPolicy: "IfNotPresent"
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
           env:
@@ -40,4 +40,4 @@ spec:
       volumes:
         - name: postgresdb
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: postgres-pvc
