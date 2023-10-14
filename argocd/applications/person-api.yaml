@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: person-api
+  namespace: argocd
+spec:
+  destination:
+    namespace: udaconnect
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: manifests/person-api
+    repoURL: git@github.com:simonjanssen/Projects.UdaConnect.git
+    targetRevision: feature/argocd
+  syncPolicy: {}
