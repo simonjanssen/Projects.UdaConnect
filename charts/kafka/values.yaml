@@ -2076,6 +2076,9 @@ provisioning:
   topics:
     - name: locations
     - name: locations-debug
+    - name: locations-debug-2
+      config:
+        group.id: "locations-debug-2-group"
   ## @param provisioning.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
