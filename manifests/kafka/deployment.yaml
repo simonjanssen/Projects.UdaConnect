@@ -19,8 +19,8 @@ spec:
           readinessProbe:
             exec:
               command: ["/bin/bash", "-c", "/opt/bitnami/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092"]
-            initialDelaySeconds: 30
-            periodSeconds: 5
+            initialDelaySeconds: 60
+            periodSeconds: 10
           volumeMounts:
             - mountPath: /bitnami/kafka
               name: kafkadata
