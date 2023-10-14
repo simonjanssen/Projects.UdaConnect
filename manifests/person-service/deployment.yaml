@@ -15,7 +15,7 @@ spec:
       containers:
         - name: person-service
           image: simonshub/udaconnect-ms-person-service:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 5005
           env:

@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: location-service
-          image: simonshub/udaconnect-ms-location-service:0.0.2
-          imagePullPolicy: IfNotPresent
+          image: simonshub/udaconnect-ms-location-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:

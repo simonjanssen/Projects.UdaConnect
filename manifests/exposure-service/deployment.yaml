@@ -15,7 +15,7 @@ spec:
       containers:
         - name: exposure-service
           image: simonshub/udaconnect-ms-exposure-service:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: DB_USER
               valueFrom:

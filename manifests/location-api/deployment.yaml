@@ -15,7 +15,7 @@ spec:
       containers:
         - name: location-api
           image: simonshub/udaconnect-ms-location-api:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
