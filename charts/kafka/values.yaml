@@ -2075,6 +2075,7 @@ provisioning:
   ##
   topics:
     - name: locations
+      numPartitions: 1
     - name: locations-debug
     - name: locations-debug-2
       config:
