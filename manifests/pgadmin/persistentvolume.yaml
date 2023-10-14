@@ -1,7 +1,7 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgres-volume
+  name: pgadmin-volume
 spec:
   storageClassName: manual
   capacity:
@@ -9,4 +9,4 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /mnt/data/postgres
+    path: /mnt/data/pgadmin
