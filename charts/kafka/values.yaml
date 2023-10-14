@@ -2060,7 +2060,7 @@ provisioning:
   enabled: true
   ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
   ##
-  numPartitions: 1
+  numPartitions: 3
   ## @param provisioning.replicationFactor Default replication factor for topics when unspecified
   ##
   replicationFactor: 1
@@ -2075,7 +2075,7 @@ provisioning:
   ##
   topics:
     - name: locations
-      numPartitions: 3
+    - name: locations-debug
   ## @param provisioning.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
