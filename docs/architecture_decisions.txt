@@ -2,7 +2,7 @@
 The given application has been refactored into the following microservices. 
 Each service has a dedicated docker image and is treated as a separate deployment in kubernetes.
 All deployments share the same namespace to allow communication between pods.
-
+I would strongly recommend to read the README/Architecture section first to get a better general understanding.
 
 kafka:
     - Implements a Kafka queue
