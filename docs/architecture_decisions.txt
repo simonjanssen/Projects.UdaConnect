@@ -1,0 +1,59 @@
+
+The given application has been refactored into the following microservices. 
+Each service has a dedicated docker image and is treated as a separate deployment in kubernetes.
+All deployments share the same namespace to allow communication between pods.
+I would strongly recommend to read the README/Architecture section first to get a better general understanding.
+
+kafka:
+    - Implements a Kafka queue
+    - Based on the bitnami/kafka public image and kubernetes configuration
+    - Adaptions can be made in the values.yaml file of the helm chart provided in charts/kafka
+    - Code copied from https://github.com/bitnami/charts/tree/main/bitnami/kafka
+    - Modifications made compared to the public tamplate:
+        - define "locations" topic when provisioning the container
+        - disable secure communication / switch to PLAINTEXT
+
+location-api:
+    - Exposes a REST API to ingest location data using the POST /locations endpoint.
+    - The REST interface based on the FastAPI library allows type checking of the inputs.
+    - Once checked, inputs are passed to a Kafka message queue (the location-api acts as publisher). No actual computing or database requests are made. Client doesn't need to wait for database write completion.
+    - The  combination of REST / type checking and Kafka allows to take large volumes of location data.
+    - Wide adoption of REST allows to ingest data from different devices.
+
+location-service:
+    - Regularily consumes Kafka queue for topic "locations"
+    - Writes consumed location messages to postgres database using bulk inserts
+    - Instead of making a database write for each incoming location data from the location-api directly, the location-service triggers an efficient bulk write.
+    - The message queue allows to decouple data receiving and data storing in the database and scale both services (location-api and location-service) independently.
+
+person-api:
+    - Exposes a REST API to write person information and retrieve connections
+    - Refactored as separate service that comprises all endpoints for the frontend module
+    - Parses received REST messages as gRPC messages and implements a gRPC client
+    - Takes advantage of gRPC's strict message defintions to send/receive the more complex person/connection message types
+    - REST API ensures compatibility towards frontend module
+    - Consistent definitions in proto file in build/types
+
+person-service:
+    - Implements gRPC server
+    - Parses gRPC messages to structured database requests
+    - Build pipeline copies identical proto file from build/types directory to avoid duplicates
+
+exposure-service:
+    - Asynchroncheous calculation of connections between persons
+    - Location database entries for the current date are regularily checked against proximity
+    - Minimum distance for each person-pair for each day is calculated
+    - Results are stored in a dedicated exposure table
+    - When the connection endpoint in the person-api is called this exposure table can be faster queried as pair-wise distances have been pre-calculated offline
+    - For large volumes of location data and many participants an online-calculation for each request would take a long time detrimental to a smooth frontend experience
+
+frontend:
+    - Node.JS based frontend
+    - Calls the /persons and /conections endpoints of the person-api module
+    - No modifcations made except for port changes
+
+postgres:
+    - Implements postgres database used to store person, location and exposure data
+
+pgadmin:
+    - Database management UI for postgres db

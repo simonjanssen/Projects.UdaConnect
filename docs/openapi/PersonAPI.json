@@ -1,0 +1,349 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "PersonAPI",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/persons": {
+            "get": {
+                "summary": "Get Persons",
+                "operationId": "get_persons_persons_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/Person"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Get Persons Persons Get"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create Person",
+                "operationId": "create_person_persons_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Person"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Person"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/persons/{person_id}": {
+            "get": {
+                "summary": "Get Person",
+                "operationId": "get_person_persons__person_id__get",
+                "parameters": [
+                    {
+                        "name": "person_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "description": "person identifier",
+                            "title": "Person Id"
+                        },
+                        "description": "person identifier",
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Person"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/persons/{person_id}/connection": {
+            "get": {
+                "summary": "Get Connection",
+                "operationId": "get_connection_persons__person_id__connection_get",
+                "parameters": [
+                    {
+                        "name": "person_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "description": "person identifier",
+                            "title": "Person Id"
+                        },
+                        "description": "person identifier",
+                        "example": 1
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "lower bound of date range",
+                            "title": "Start Date"
+                        },
+                        "description": "lower bound of date range",
+                        "example": "2023-10-01"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "upper bound of date range",
+                            "title": "End Date"
+                        },
+                        "description": "upper bound of date range",
+                        "example": "2023-11-01"
+                    },
+                    {
+                        "name": "distance",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "description": "proximity to a given user in meters",
+                            "default": 5.0,
+                            "title": "Distance"
+                        },
+                        "description": "proximity to a given user in meters",
+                        "example": 5.0
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Connection"
+                                    },
+                                    "title": "Response Get Connection Persons  Person Id  Connection Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Connection": {
+                "properties": {
+                    "person": {
+                        "$ref": "#/components/schemas/Person"
+                    },
+                    "location": {
+                        "$ref": "#/components/schemas/LocationRetrieve"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "person",
+                    "location"
+                ],
+                "title": "Connection"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "LocationRetrieve": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id",
+                        "examples": [
+                            123
+                        ]
+                    },
+                    "person_id": {
+                        "type": "integer",
+                        "title": "Person Id",
+                        "examples": [
+                            123
+                        ]
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "title": "Longitude",
+                        "examples": [
+                            123.456
+                        ]
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "title": "Latitude",
+                        "examples": [
+                            123.456
+                        ]
+                    },
+                    "creation_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Creation Time",
+                        "examples": [
+                            "2023-10-03T07:06:08.210215"
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "person_id",
+                    "longitude",
+                    "latitude",
+                    "creation_time"
+                ],
+                "title": "LocationRetrieve"
+            },
+            "Person": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id",
+                        "examples": [
+                            123
+                        ]
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "title": "First Name",
+                        "examples": [
+                            "Thomas"
+                        ]
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "title": "Last Name",
+                        "examples": [
+                            "Mueller"
+                        ]
+                    },
+                    "company_name": {
+                        "type": "string",
+                        "title": "Company Name",
+                        "examples": [
+                            "FC Bayern"
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "first_name",
+                    "last_name",
+                    "company_name"
+                ],
+                "title": "Person"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}

@@ -1,0 +1,252 @@
+{
+	"info": {
+		"_postman_id": "fb834248-c1c0-4149-92e2-0d6fbefe53cb",
+		"name": "udaconnect",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29232484"
+	},
+	"item": [
+		{
+			"name": "PersonAPI",
+			"item": [
+				{
+					"name": "create-person-1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"first_name\": \"Thomas\",\n    \"last_name\": \"Mueller\",\n    \"company_name\": \"FC Bayern\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:30103/persons",
+							"host": [
+								"localhost"
+							],
+							"port": "30103",
+							"path": [
+								"persons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-person-2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 2,\n    \"first_name\": \"Mats\",\n    \"last_name\": \"Hummels\",\n    \"company_name\": \"BVB\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:30103/persons",
+							"host": [
+								"localhost"
+							],
+							"port": "30103",
+							"path": [
+								"persons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-all-persons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:30103/persons",
+							"host": [
+								"localhost"
+							],
+							"port": "30103",
+							"path": [
+								"persons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-person-1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:30103/persons/1",
+							"host": [
+								"localhost"
+							],
+							"port": "30103",
+							"path": [
+								"persons",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-connections-1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:30103/persons/1/connection?start_date=2023-10-01&end_date=2023-11-01&distance=100000",
+							"host": [
+								"localhost"
+							],
+							"port": "30103",
+							"path": [
+								"persons",
+								"1",
+								"connection"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2023-10-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2023-11-01"
+								},
+								{
+									"key": "distance",
+									"value": "100000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-connection-2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:30103/persons/2/connection?start_date=2023-10-01&end_date=2023-11-01&distance=100000",
+							"host": [
+								"localhost"
+							],
+							"port": "30103",
+							"path": [
+								"persons",
+								"2",
+								"connection"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2023-10-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2023-11-01"
+								},
+								{
+									"key": "distance",
+									"value": "100000"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LocationAPI",
+			"item": [
+				{
+					"name": "create-new-location-1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"person_id\": 1,\n    \"longitude\": 25.123,\n    \"latitude\": 25.123,\n    \"creation_time\": \"2023-10-15T07:06:08.210215\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:30102/locations",
+							"host": [
+								"localhost"
+							],
+							"port": "30102",
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-new-location-2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"person_id\": 2,\n    \"longitude\": 25.124,\n    \"latitude\": 25.124,\n    \"creation_time\": \"2023-10-15T07:06:08.210215\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:30102/locations",
+							"host": [
+								"localhost"
+							],
+							"port": "30102",
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:30102/locations/1",
+							"host": [
+								"localhost"
+							],
+							"port": "30102",
+							"path": [
+								"locations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
