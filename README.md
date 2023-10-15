@@ -109,3 +109,4 @@ Once you have deployed the application, the interactive SwaggerUI is available a
 
 ## Postman Collection
 
+A [Postman](https://www.postman.com/) collection of all API endpoints is provided in [docs/postman.json](docs/postman.json).
