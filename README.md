@@ -48,6 +48,9 @@ kubectl apply -f argocd/udaconnect.yaml
     - The ArgoCD setup follows the [App of Apps Pattern](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/). The **udaconnect** app acts as the parent app that needs to be synced first.
     - You can then sync all the other apps. I would recommend to sync **configuration**, **postgres** and **kafka** apps first as the other apps depend on them.
 
+![ArgoCD UI Deployment](docs/argocd_screenshot.jpg)
+
+
 4. Available endpoints after cluster startup:
     - The following endpoints are externally available on your host system:
         - [localhost:30100](http://localhost:30100): pgAdmin Frontend
@@ -67,6 +70,8 @@ python applications/udaconnect-test-clients/client.py -i PERSON_ID
 ```
 
 Note that due to the async database update (`location-service`) and the async connections calculation (`exposure-service`) it may take two or three minutes until you see the data in the **frontend**.
+
+The deployment has been tested with [k3s](https://k3s.io/) and [ArgoCD v2.8.0](https://argo-cd.readthedocs.io/en/stable/) using an [Ubuntu 22.04.3 LTS Server](https://ubuntu.com/download/server) environment.
 
 
 ## Architecture
