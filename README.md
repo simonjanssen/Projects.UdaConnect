@@ -110,3 +110,24 @@ Once you have deployed the application, the interactive SwaggerUI is available a
 ## Postman Collection
 
 A [Postman](https://www.postman.com/) collection of all API endpoints is provided in [docs/postman.json](docs/postman.json).
+
+
+## gRPC Documentation
+
+All gRPC messages and services are defined in [build/types/definitions.proto](build/types/definitions.proto).
+
+The `*_pb2` and `*_pb2_grpc` files are *not* part of the application source code as they are generated during the image build process (cf. Dockerfiles for person-service and person-api apps and [compile script](applications/udaconnect-ms-person-service/compile.sh)).
+
+The gRPC server is launched in the person-service [main module](applications/udaconnect-ms-person-service/main.py). 
+
+The gRPC client is launched in the person-api [main module](applications/udaconnect-ms-person-api/main.py).
+
+See also [docs/grpc](docs/grpc.txt) for further details.
+
+
+## Possible Future Work
+- Use secrets instead of configmaps for database credentials
+- Use encrypted communication for Kafka messaging
+- Specifiy resource requests for all pods
+- Add readiness- and liveness-probes for pods
+- Open Kafka/gRPC endpoints for external clients
