@@ -1,0 +1,21 @@
+
+All gRPC messages and services are globally defined in build/types/definitions.proto
+Please also read the README/gRPC section for general information regarding implementation.
+
+The proto file defines a LocationMessage and a PersonMessage and a ConnectionMessage that follow the database schmeas defined in build/types/models.py
+It also defines a LocationMessageList and a PersonMessageList and a ConnectionMessageList to pass Locations and Persons as lists betweeen person-service and person-api module.
+
+A ConnectionMessage contains a LocationMessage and a PersonMessage object to uniquely identify a person-to-person connection.
+
+To pass a request from person-api gRPC client to person-service gRPC server additional request message types are defined:
+- PersonRequestMessage to query a specific person based on a person id
+- LocationIdMessage to query a specific location based on a location id
+- ConnectionRequestMessage to query all connections for a specific person, at a specific time and within a specific distance in meters.
+
+All requests are made using the auto-generated definitions_pb2 module. All requests are implemented in the main.py of the person-api module.
+
+The proto file defines four services which are implemented in the person-service gRPC server main.py:
+- PersonService.GetPerson: takes a PersonRequestMessage and returns a PersonMessage
+- PersonService.GetPersons: takes an EmptyMessage and returns a PersonMessageList
+- PersonService.CreatePerson: takes a PersonMessage and returns the same PersonMessage as confirmation
+- ConnectionService.GetConnections: takes a ConnectionRequestMessage and returns a ConnectionMessageList

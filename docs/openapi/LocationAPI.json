@@ -1,0 +1,226 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "LocationAPI",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/locations": {
+            "post": {
+                "summary": "Post Location",
+                "operationId": "post_location_locations_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LocationIngest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LocationIngest"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/locations/{location_id}": {
+            "get": {
+                "summary": "Get Location",
+                "operationId": "get_location_locations__location_id__get",
+                "parameters": [
+                    {
+                        "name": "location_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Location Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LocationRetrieve"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "LocationIngest": {
+                "properties": {
+                    "person_id": {
+                        "type": "integer",
+                        "title": "Person Id",
+                        "examples": [
+                            123
+                        ]
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "title": "Longitude",
+                        "examples": [
+                            123.456
+                        ]
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "title": "Latitude",
+                        "examples": [
+                            123.456
+                        ]
+                    },
+                    "creation_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Creation Time",
+                        "examples": [
+                            "2023-10-03T07:06:08.210215"
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "person_id",
+                    "longitude",
+                    "latitude",
+                    "creation_time"
+                ],
+                "title": "LocationIngest"
+            },
+            "LocationRetrieve": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id",
+                        "examples": [
+                            123
+                        ]
+                    },
+                    "person_id": {
+                        "type": "integer",
+                        "title": "Person Id",
+                        "examples": [
+                            123
+                        ]
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "title": "Longitude",
+                        "examples": [
+                            123.456
+                        ]
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "title": "Latitude",
+                        "examples": [
+                            123.456
+                        ]
+                    },
+                    "creation_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Creation Time",
+                        "examples": [
+                            "2023-10-03T07:06:08.210215"
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "person_id",
+                    "longitude",
+                    "latitude",
+                    "creation_time"
+                ],
+                "title": "LocationRetrieve"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}
