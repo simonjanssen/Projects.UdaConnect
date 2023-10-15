@@ -104,6 +104,8 @@ Once you have deployed the application, the interactive SwaggerUI is available a
 - **LocationAPI**: [localhost:30102/docs](http://localhost:30102/docs) (or [docs/openapi/LocationAPI.json](docs/openapi/LocationAPI.json))
 - **PersonAPI**: [localhost:30103/docs](http://localhost:30103/docs) (or [docs/openapi/PersonAPI.json](docs/openapi/PersonAPI.json))
 
+![OpenAPI PersonAPI Screenshot](docs/openapi/PersonAPI.png)
+
 
 ## Postman Collection
 
