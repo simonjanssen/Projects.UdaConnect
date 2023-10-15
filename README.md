@@ -25,10 +25,36 @@ chown -R 5050:5050 /mnt/data/pgadmin
 chown -R 1001:1001 /mnt/data/kafka 
 ```
 
-2. Deploy with argocd:
+2. Deploy with ArgoCD:
 ```bash
 kubectl apply -f argocd/udaconnect.yaml
 ```
+
+3. Sync applications: 
+    - For this project, auto-sync is not enabled so you need to sync the apps manually.
+    - The ArgoCD setup follows the [App of Apps Pattern](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/). The **udaconnect** app acts as the parent app that needs to be synced first.
+    - You can then sync all the other apps. I would recommend to sync **configuration**, **postgres** and **kafka** apps first as the other apps depend on them.
+
+4. Available endpoints after cluster startup:
+    - The following endpoints are externally available on your host system:
+        - [localhost:30100](http://localhost:30100): pgAdmin Frontend
+        - [localhost:30101](http://localhost:30101): Udaconnect Frontend
+        - [localhost:30102](http://localhost:30102): LocationAPI
+        - [localhost:30103](http://localhost:30103): PersonAPI
+    - The following endpoints are cluster-internal only:
+        - [postgres-svc:5432](tcp://postgres-svc:5432): PostgreSQL database
+        - [kafka:9092](tcp://kafka:9092): Kafka server
+        - [person-service-svc:5005](tcp://person-service-svc:5005): gRPC server
+
+5. Generate some data:
+    - Generate some mock persons using the **PersonAPI** endpoint (cf. [postman collection](docs/postman.json)). The interactive SwaggerUI provides you with some mock data you can directly `post`. I would recommend to add at least two different persons.
+    - Generate some mock location data using the **LocationAPI** endpoint (cf. [postman collection](docs/postman.json)). Again, you can use the interactive SwaggerUI to `post` some data. Alternatively, you can start mock clients that generate some random location data for particular `persons`:
+```bash
+python applications/udaconnect-test-clients/client.py -i PERSON_ID
+```
+
+Note that due to the async database update (`location-service`) and the async connections calculation (`exposure-service`) it may take two or three minutes until you see the data in the **frontend**.
+
 
 ## Architecture
 
@@ -43,8 +69,8 @@ Architecture diagram:
 The refactored applications implements two REST APIs. The OpenAPI documentation is auto-generated using [FastAPI Interactive Docs](https://fastapi.tiangolo.com/#interactive-api-docs) based on the [Pydantic Models](https://docs.pydantic.dev/latest/concepts/models/) in [build/types/schemas.py](build/types/schemas.py).
 
 Once you have deployed the application, the interactive SwaggerUI is available at the `/docs` endpoint for both APIs. You can also find a copy of both docs in [docs/openapi](docs/openapi/).
-- **LocationAPI**: [localhost:30102/docs](localhost:30102/docs) (or [docs/openapi/LocationAPI.json](docs/openapi/LocationAPI.json))
-- **PersonAPI**: [localhost:30103/docs](localhost:30103/docs) (or [docs/openapi/PersonAPI.json](docs/openapi/PersonAPI.json))
+- **LocationAPI**: [localhost:30102/docs](http://localhost:30102/docs) (or [docs/openapi/LocationAPI.json](docs/openapi/LocationAPI.json))
+- **PersonAPI**: [localhost:30103/docs](http://localhost:30103/docs) (or [docs/openapi/PersonAPI.json](docs/openapi/PersonAPI.json))
 
 
 ## Postman Collection
